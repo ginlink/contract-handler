@@ -1,35 +1,24 @@
-/*
- * @Author: your name
- * @Date: 2021-09-01 14:15:56
- * @LastEditTime: 2021-10-28 16:17:48
- * @LastEditors: jiangjin
- * @Description: In User Settings Edit
- * @FilePath: /converter-bsc-web/src/components/Header/index.tsx
- */
-import { useIsPcByScreenWidth } from '@/hooks/useIsPc'
 import React, { memo } from 'react'
+import { NETWORK_LABELS } from '@/constants/chains'
+import { useActiveWeb3React } from '@/hooks/web3'
+import { Space } from 'antd'
 import styled from 'styled-components/macro'
+import Web3Status from '../Web3Status'
+import { TYPE } from '@/theme'
 
-import HeaderPC from './HeaderPC'
-const HeaderWrapper = styled.div<{ isPc: boolean }>`
-  margin: 13px 24px;
+const Wrapper = styled(Space)``
 
-  position: ${({ isPc }) => (isPc ? 'absolute' : '')};
-  right: ${({ isPc }) => (isPc ? '0' : '')};
-`
-
-const HeaderInnerWrapper = styled.div<{ isPc: boolean }>`
-  width: 100%;
-
-  position: ${(props) => (props.isPc ? 'relative' : '')};
-  z-index: ${(props) => (props.isPc ? '3' : '')};
-`
 function Header() {
-  const isPc = useIsPcByScreenWidth()
+  const { chainId } = useActiveWeb3React()
+
   return (
-    <HeaderWrapper isPc={isPc}>
-      <HeaderPC />
-    </HeaderWrapper>
+    <Wrapper>
+      <TYPE.body color="white" lineHeight="unset">
+        {NETWORK_LABELS[chainId ?? -1] ?? 'ErrorNetWork'}
+      </TYPE.body>
+
+      <Web3Status />
+    </Wrapper>
   )
 }
 

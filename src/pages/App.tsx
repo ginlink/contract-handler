@@ -1,15 +1,15 @@
-import React, { connect } from 'react-redux'
-import { dispatchs } from '@/store/reducer/index'
-import Router from '@/router/router'
-import Header from '@/components/Header'
+import React from 'react-redux'
+import { Redirect, Route, Switch } from 'react-router'
+import Home from './Home'
 
-const App = (props: any) => {
+export default function App() {
   return (
     <>
-      <Header />
-      <Router store={props} />
+      <Switch>
+        <Route strict exact path="/home" component={Home} />
+
+        <Redirect from="/" to="/home" />
+      </Switch>
     </>
   )
 }
-// store 注入到全局
-export default connect((state: any) => ({ store: state }), { ...dispatchs })(App)

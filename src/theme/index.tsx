@@ -1,13 +1,15 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, HTMLProps } from 'react'
 import { TextProps as TextPropsOriginal, Text } from 'rebass'
 import styled, {
   createGlobalStyle,
   css,
   DefaultTheme,
+  keyframes,
   ThemeProvider as StyledComponentsThemeProvider,
-} from 'styled-components'
+} from 'styled-components/macro'
 import { Colors } from './styled'
 export * from './components'
+import { ExternalLink as LinkIconFeather } from 'react-feather'
 
 type TextProps = Omit<TextPropsOriginal, 'css'>
 
@@ -40,7 +42,7 @@ export function colors(darkMode: boolean): Colors {
     black,
 
     // text
-    text0: '#121c41',
+    text0: '#131b3e',
     text1: '#000000',
     text2: '#8f94a9',
     text3: '#565a69',
@@ -56,8 +58,8 @@ export function colors(darkMode: boolean): Colors {
     text11: '#00b594',
 
     // backgrounds / greys
-    bg0: darkMode ? black : '#FFF',
-    bg1: darkMode ? black : '#f5f6fa',
+    bg0: '#FFF',
+    bg1: '#f5f7f9',
     bg2: darkMode ? black : '#F7F8FA',
     bg3: darkMode ? black : '#e0e6f1',
     bg4: 'rgba(255, 255, 255, 0.1)',
@@ -80,7 +82,7 @@ export function colors(darkMode: boolean): Colors {
     bs0: 'rgba(224,230,242,1)',
 
     //primary colors
-    primary1: '#FFAB36',
+    primary1: '#63d0ba',
     primary2: '#8391a8',
     primary3: 'rgba(0, 118, 255, 0.4)',
     primary4: 'rgba(0, 118, 255, 0.5)',
@@ -107,7 +109,6 @@ export function colors(darkMode: boolean): Colors {
     red3: '#D60000',
     green1: '#00c3a0',
     yellow1: '#ff9b39',
-
     yellow2: '#FF8F00',
     yellow3: '#F3B71E',
     blue1: '#0068FC',
@@ -158,45 +159,73 @@ export function theme(darkMode: boolean): DefaultTheme {
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const themeObject = useMemo(() => theme(true), [])
+  const themeObject = useMemo(() => theme(false), [])
 
   return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>
 }
 
-const TextWrapper = styled(Text)<{ color: keyof Colors; fontSize: string }>`
+const TextWrapper = styled(Text)<{
+  color: keyof Colors
+  fontSize0: number
+  fontSize1: number
+  lineHeight0: number
+  lineHeight1: number
+}>`
   color: ${({ color, theme }) => (theme as any)[color]};
+  font-size: ${({ fontSize0 }) => fontSize0 && fontSize0 + 'px'};
+  line-height: 1;
 `
+
+// const TextWrapper = styled.div<{
+//   color: keyof Colors
+//   fontSize0: number
+//   fontSize1: number
+//   lineHeight0: number
+//   lineHeight1: number
+//   fontWeight: number
+// }>`
+//   color: ${({ color, theme }) => (theme as any)[color]};
+//   font-size: ${({ fontSize0 }) => fontSize0 + 'px'};
+//   line-height: ${({ lineHeight0 }) => lineHeight0 + 'px'};
+//   font-weight: ${({ fontWeight }) => fontWeight};
+// `
+
+/**
+ * 文字种类
+ * 12px small
+ * 16px body
+ * 18px subHeader
+ * 24px mediumHeader
+ * 30px largeHeader
+ */
 
 export const TYPE = {
   main(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'white'} {...props} />
+    return <TextWrapper fontWeight={500} {...props} />
   },
-  link(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'white'} {...props} />
+  body(props: TextProps) {
+    return <TextWrapper fontWeight={500} fontSize0={16} {...props} />
   },
   label(props: TextProps) {
-    return <TextWrapper fontWeight={600} color={'white'} {...props} />
+    return <TextWrapper fontWeight={500} fontSize0={16} {...props} />
+  },
+  largeHeader(props: TextProps) {
+    return <TextWrapper fontWeight={600} fontSize0={30} {...props} />
+  },
+  mediumHeader(props: TextProps) {
+    return <TextWrapper fontWeight={600} fontSize0={24} {...props} />
+  },
+  subHeader(props: TextProps) {
+    return <TextWrapper fontWeight={600} fontSize0={18} {...props} />
+  },
+  small(props: TextProps) {
+    return <TextWrapper fontWeight={500} fontSize0={12} {...props} />
   },
   black(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'text1'} {...props} />
+    return <TextWrapper fontWeight={500} {...props} />
   },
   white(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'white'} {...props} />
-  },
-  body(props: TextProps) {
-    return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />
-  },
-  largeHeader(props: TextProps) {
-    return <TextWrapper fontWeight={600} fontSize={24} {...props} />
-  },
-  mediumHeader(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={20} {...props} />
-  },
-  subHeader(props: TextProps) {
-    return <TextWrapper fontWeight={400} fontSize={14} {...props} />
-  },
-  small(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={11} {...props} />
   },
   blue(props: TextProps) {
     return <TextWrapper fontWeight={500} color={'blue1'} {...props} />
@@ -208,26 +237,23 @@ export const TYPE = {
     return <TextWrapper fontWeight={500} color={'text3'} {...props} />
   },
   gray(props: TextProps) {
-    return <TextWrapper fontWeight={500} color={'bg3'} {...props} />
+    return <TextWrapper fontWeight={500} color={'text2'} {...props} />
   },
   italic(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={12} fontStyle={'italic'} color={'text2'} {...props} />
+    return <TextWrapper fontWeight={500} fontSize0={12} fontStyle={'italic'} color={'text2'} {...props} />
   },
   error({ error, ...props }: { error: boolean } & TextProps) {
     return <TextWrapper fontWeight={500} color={error ? 'red1' : 'text1'} {...props} />
   },
 }
 
-// TODO 1.改动Divide以适配移动端
-export const Divide = styled.div<{ lang?: string | undefined }>`
-  height: ${(props) => (props.lang ? props.lang : '30px')};
-`
-
 export const ThemedGlobalStyle = createGlobalStyle`
   html,
   body {
-    color: #ffffff;
-    line-height: 1;
+    color: ${({ theme }) => theme.text0}; 
+    background-color: ${({ theme }) => theme.white}; 
+    font-weight: 500;
+    /* line-height: 1; */
 
     box-sizing: border-box;
 
@@ -237,17 +263,15 @@ export const ThemedGlobalStyle = createGlobalStyle`
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on, 'cv03' on;
     font-family: 'Inter', sans-serif;
-
-    font-weight: 500;
   }
 
   h1,
   a{
-    color: ${({ theme }) => theme.white}; 
+    color: ${({ theme }) => theme.text0}; 
   }
-  a,a:link,a:visited,a:hover,a:active{
+  /* a,a:link,a:visited,a:hover,a:active{
     text-decoration: none;
-  }
+  } */
 
   ::selection{
     background-color: ${(props) => props.theme.primary1};
@@ -275,4 +299,130 @@ export const ThemedGlobalStyle = createGlobalStyle`
   input:-ms-input-placeholder {  
     color:rgba(255,255,255,0.7);
   }
+  
+  .ant-modal-body {
+    padding: unset;
+  }
+  .ant-modal-content{
+    border-radius: 20px;
+  }
+
+  /* 修改modal默认字体样式 */
+  .ant-modal,
+  .ant-input,
+  textarea.ant-input{
+    font-feature-settings: unset;
+    font-variant: unset;
+  }
 `
+
+export const Dots = styled.span`
+  &::after {
+    display: inline-block;
+    animation: ellipsis 1.25s infinite;
+    content: '.';
+    width: 1em;
+    text-align: left;
+  }
+  @keyframes ellipsis {
+    0% {
+      content: '.';
+    }
+    33% {
+      content: '..';
+    }
+    66% {
+      content: '...';
+    }
+  }
+`
+
+const loadingAnimation = keyframes`
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+`
+
+export const LoadingBox = styled.main`
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.bg0};
+  padding: 8px;
+  box-shadow: 0px 2px 20px 0px #dfecfb;
+  border-radius: 15px;
+`
+
+export const LoadingRows = styled.div`
+  display: grid;
+  min-width: 75%;
+  max-width: 960px;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.8em;
+  grid-template-columns: repeat(3, 1fr);
+  & > div {
+    animation: ${loadingAnimation} 1.5s infinite;
+    animation-fill-mode: both;
+    background: linear-gradient(
+      to left,
+      ${({ theme }) => theme.bg1} 25%,
+      ${({ theme }) => theme.bg2} 50%,
+      ${({ theme }) => theme.bg1} 75%
+    );
+    background-size: 400%;
+    border-radius: 12px;
+    height: 2.4em;
+    will-change: background-position;
+  }
+  & > div:nth-child(4n + 1) {
+    grid-column: 1 / 3;
+  }
+  & > div:nth-child(4n) {
+    grid-column: 3 / 4;
+    margin-bottom: 2em;
+  }
+`
+const LinkIconWrapper = styled.a`
+  text-decoration: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+  :hover {
+    text-decoration: none;
+    opacity: 0.7;
+  }
+
+  :focus {
+    outline: none;
+    text-decoration: none;
+  }
+
+  :active {
+    text-decoration: none;
+  }
+`
+export const LinkIcon = styled(LinkIconFeather)`
+  height: 16px;
+  width: 18px;
+  margin-left: 10px;
+  stroke: ${({ theme }) => theme.blue1};
+`
+export function ExternalLinkIcon({
+  target = '_blank',
+  href,
+  rel = 'noopener noreferrer',
+  ...rest
+}: Omit<HTMLProps<HTMLAnchorElement>, 'as' | 'ref' | 'onClick'> & { href: string }) {
+  return (
+    <LinkIconWrapper target={target} rel={rel} href={href} onClick={handleClickExternalLink} {...rest}>
+      <LinkIcon />
+    </LinkIconWrapper>
+  )
+}
+function handleClickExternalLink(event: React.MouseEvent<HTMLAnchorElement>) {
+  event.preventDefault()
+}

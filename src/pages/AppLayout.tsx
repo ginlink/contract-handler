@@ -1,13 +1,17 @@
 import React from 'react'
 import styled from 'styled-components/macro'
 
-import { Layout, Menu, Breadcrumb } from 'antd'
+import { Layout, Menu, Breadcrumb, Space } from 'antd'
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons'
+import Header from '@/components/Header'
+import { NavLink } from 'react-router-dom'
 
 const { SubMenu } = Menu
-const { Header, Content, Sider } = Layout
+const { Header: HeaderD, Content, Sider } = Layout
 
 const Wrapper = styled.div``
+
+const StyledNavLink = styled(NavLink)``
 
 const routerList: Record<string, string> = {
   '/home': '0',
@@ -21,14 +25,13 @@ const routerList: Record<string, string> = {
 export default function AppLayout({ children }: { children: any }) {
   return (
     <Wrapper>
-      <Header className="header">
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-          <Menu.Item key="1">nav 1</Menu.Item>
-          <Menu.Item key="2">nav 2</Menu.Item>
-          <Menu.Item key="3">nav 3</Menu.Item>
-        </Menu>
-      </Header>
+      <HeaderD>
+        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+          <div className="logo" />
+
+          <Header />
+        </Space>
+      </HeaderD>
       <Layout>
         <Sider width={200} className="site-layout-background">
           <Menu
@@ -37,32 +40,19 @@ export default function AppLayout({ children }: { children: any }) {
             defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
           >
-            <SubMenu key="sub1" icon={<UserOutlined />} title="subnav 1">
+            <Menu.Item key="1">
+              <StyledNavLink to="/home">首页</StyledNavLink>
+            </Menu.Item>
+
+            {/* <SubMenu key="sub1" icon={<UserOutlined />} title="subnav 1">
               <Menu.Item key="1">option1</Menu.Item>
               <Menu.Item key="2">option2</Menu.Item>
               <Menu.Item key="3">option3</Menu.Item>
               <Menu.Item key="4">option4</Menu.Item>
-            </SubMenu>
-            <SubMenu key="sub2" icon={<LaptopOutlined />} title="subnav 2">
-              <Menu.Item key="5">option5</Menu.Item>
-              <Menu.Item key="6">option6</Menu.Item>
-              <Menu.Item key="7">option7</Menu.Item>
-              <Menu.Item key="8">option8</Menu.Item>
-            </SubMenu>
-            <SubMenu key="sub3" icon={<NotificationOutlined />} title="subnav 3">
-              <Menu.Item key="9">option9</Menu.Item>
-              <Menu.Item key="10">option10</Menu.Item>
-              <Menu.Item key="11">option11</Menu.Item>
-              <Menu.Item key="12">option12</Menu.Item>
-            </SubMenu>
+            </SubMenu> */}
           </Menu>
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
           <Content
             className="site-layout-background"
             style={{
@@ -75,16 +65,6 @@ export default function AppLayout({ children }: { children: any }) {
           </Content>
         </Layout>
       </Layout>
-
-      {/* <Layout className="sider-layout">
-        {isPc && (
-        )}
-        <ContentLayout collapsed={collapsed}>
-          <Content className="sider-content" screenWidth={screenWidth}>
-            {children}
-          </Content>
-        </ContentLayout>
-      </Layout> */}
     </Wrapper>
   )
 }

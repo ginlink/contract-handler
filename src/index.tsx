@@ -13,8 +13,8 @@ import 'moment/locale/zh-cn'
 import ThemeProvider, { ThemedGlobalStyle } from '@/theme'
 
 // polyfill
-import 'core-js/stable'
-import 'regenerator-runtime/runtime'
+// import 'core-js/stable'
+// import 'regenerator-runtime/runtime'
 
 import AppLayout from './pages/AppLayout'
 import { HashRouter } from 'react-router-dom'
