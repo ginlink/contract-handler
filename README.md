@@ -1,4 +1,4 @@
-## converter-bsc-web
+## contract-handler
 
 In the project directory, you can run:
 
