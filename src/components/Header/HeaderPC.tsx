@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2021-09-01 18:06:40
- * @LastEditTime: 2021-10-28 15:41:41
- * @LastEditors: jiangjin
- * @Description: In User Settings Edit
- * @FilePath: /converter-bsc-web/src/components/Header/header1.tsx
- */
 import { NETWORK_LABELS } from '@/constants/chains'
 import { useActiveWeb3React } from '@/hooks/web3'
 import React, { memo } from 'react'

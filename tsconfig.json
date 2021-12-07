@@ -23,12 +23,7 @@
       "jest"
     ],
     "baseUrl": "src",
-    "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "@/*": [
-        "*"
-      ]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src/**/*.ts",
@@ -38,4 +33,5 @@
     "node_modules",
     "cypress"
   ],
+  "extends": "./paths.json"
 }
